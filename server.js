@@ -2,20 +2,14 @@
 
 /**
  * Local / Render entry point.
- * Request handling lives in core/app.js so Vercel can import it directly
- * from api/index.js without this file ever being required in production.
+ * Request handling lives in core/app.js so Vercel imports it directly from
+ * api/index.js. Keeping `listen()` out of this file avoids Vercel mistaking
+ * it for a zero-config Node server that would shadow the static rewrites.
  */
 
-const http = require('http');
 const handler = require('./core/app.js');
+const { startLocalServer } = require('./core/local-runner.js');
 
-const PORT = Number(process.env.PORT || 8899);
-
-const server = http.createServer(handler);
-server.listen(PORT, () => {
-  console.log(`\n  Hamad TikTok running → http://localhost:${PORT}`);
-  console.log('  TikTok OAuth: ' + (process.env.TIKTOK_CLIENT_KEY && process.env.TIKTOK_CLIENT_SECRET ? 'CONFIGURED ✓' : 'NOT configured (demo mode)'));
-  console.log('');
-});
+startLocalServer(handler);
 
 module.exports = handler;

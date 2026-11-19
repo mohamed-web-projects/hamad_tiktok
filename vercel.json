@@ -1,14 +1,27 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
+    { "source": "/", "destination": "/views/index.html" },
+    { "source": "/index.html", "destination": "/views/index.html" },
+    { "source": "/upload", "destination": "/views/upload.html" },
+    { "source": "/upload.html", "destination": "/views/upload.html" },
+    { "source": "/faq", "destination": "/views/faq.html" },
+    { "source": "/faq.html", "destination": "/views/faq.html" },
+    { "source": "/privacy", "destination": "/views/privacy.html" },
+    { "source": "/privacy.html", "destination": "/views/privacy.html" },
+    { "source": "/terms", "destination": "/views/terms.html" },
+    { "source": "/terms.html", "destination": "/views/terms.html" },
+    { "source": "/setup", "destination": "/views/setup.html" },
+    { "source": "/setup.html", "destination": "/views/setup.html" },
+    { "source": "/styles.css", "destination": "/public/styles.css" },
+    { "source": "/app.js", "destination": "/public/app.js" },
+    { "source": "/upload.js", "destination": "/public/upload.js" },
+    { "source": "/setup.js", "destination": "/public/setup.js" },
+    { "source": "/favicon.svg", "destination": "/public/favicon.svg" },
     { "source": "/(.*)", "destination": "/api/index.js" }
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": "{views,public}/**/*",
-      "maxDuration": 10
-    },
-    "server.js": {
       "includeFiles": "{views,public}/**/*",
       "maxDuration": 10
     }

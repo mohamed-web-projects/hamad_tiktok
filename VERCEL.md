@@ -45,6 +45,12 @@ vercel --prod     # إنتاج
 - اختبر وضع التجريبي: `POST /api/tiktok/demo` ثم حدّث الصفحة — لازم يفضل متصل.
 - لو حصل `state_mismatch`، أكّد إن `SESSION_SECRET` متحطّ في متغيرات البيئة.
 
+## لو الصفحات الفرعية بترجع 404
+الصفحات (`index/upload/faq/privacy/terms/setup`) والملفات (`styles.css`, `app.js`, ...)
+اتضافت كـ **rewrites صريحة** في `vercel.json` قبل الـ catch-all، عشان Vercel يقدّمها
+كملفات Static مباشرة من `views/` و`public/` بدل ما يعتمد على قراءتها جوه الـ function.
+بعد تعديل `vercel.json` لازم تعمل Redeploy (أو Push لو متصل بـ GitHub).
+
 ## ملاحظات
 
 - النشر على `*.vercel.app` بيشتغل في Sandbox بتاع تيك توك. قبل مراجعة التطبيق
