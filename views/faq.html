@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الأسئلة الشائعة · Hamad TikTok</title>
+<meta name="description" content="كل الأسئلة عن الربط بحساب تيك توك، الصلاحيات، النشر، والخصوصية.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=1">
+</head>
+<body>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<div class="page">
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        </span>
+        <span class="brand-name">Hamad TikTok</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="/">الرئيسية</a>
+        <a href="/upload.html">مساحة الرفع</a>
+        <a href="/faq.html" class="active">الأسئلة</a>
+        <a href="/setup.html">التفعيل</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary btn-sm" href="/upload.html">ابدأ الآن</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="القائمة">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="wrap doc">
+      <h1>الأسئلة الشائعة</h1>
+      <p class="lead">كل حاجة عن الربط، الصلاحيات، والنشر — بصراحة وبدون مبالغة.</p>
+
+      <div id="faq">
+        <div class="acc">
+          <button type="button">إيه اللي بيحصل بالظبط لما أضغط «تسجيل الدخول بتيك توك»؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>بيتم تحويلك لموقع تيك توك نفسه (tiktok.com) عشان تسجل دخولك هناك وتوافق على الصلاحيات. بعد الموافقة، تيك توك بيرجّع كود لسيرفر الموقع، والسيرفر بيبادله بتوكن مؤقت بيستخدمه للوصول لاسم حسابك وصورتك — وبعدها للنشر لما تضغط «نشر».</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">هل الموقع بيشوف كلمة السر بتاعتي؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>لأ. كلمة السر بتتكتب على نطاق tiktok.com بس، وإحنا مش بنشوفها ولا بنخزّنها. اللي بنستلمه هو توكن وصول مؤقت، وتقدر تلغيه في أي وقت من إعدادات تيك توك ← Security &amp; permissions ← Manage app permissions.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">إيه الصلاحيات المطلوبة وليه؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>
+            <ul>
+              <li><code class="inline">user.info.basic</code> — الاسم والصورة عشان نعرض حسابك.</li>
+              <li><code class="inline">user.info.profile</code> — بيانات البروفايل العامة.</li>
+              <li><code class="inline">user.info.stats</code> — عدد المتابعين والإعجابات، للعرض بس.</li>
+              <li><code class="inline">video.publish</code> — نشر الفيديو على حسابك بعد تأكيدك.</li>
+            </ul>
+            مفيش صلاحية لقراءة الرسائل، ومفيش صلاحية لحذف منشورات.
+          </div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">هل الفيديو بيترفع على سيرفركم؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>في خطوة الاختيار والتفاصيل، الفيديو بيتقرأ محليًا على جهازك (المدة، الدقة، والأغلفة). الرفع الفعلي بيبدأ بس لما تضغط «نشر» وتأكد الملخص.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">هل بيحصل نشر تلقائي أو مجدول؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>لأ. مفيش جدولة ولا نشر في الخلفية. كل عملية إرسال بتبدأ بضغطتك على «نشر» وموافقتك على ملخص المنشور.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">الوضع التجريبي ده إيه؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>وضع بيوريك التجربة الكاملة (الخطوات، المعاينة، شريط التقدم) من غير أي اتصال حقيقي بتيك توك. بيظهر دائمًا بشارة صفراء «وضع تجريبي» عشان مفيش أي لبس. لو مفاتيح التطبيق مش متظبطة على السيرفر، ده الوضع الوحيد المتاح.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">ليه النشر الحقيقي محتاج موافقة من تيك توك؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>واجهة النشر (Content Posting API) بتتطلب مراجعة من تيك توك. التطبيق اللي لسه متمرشّحش بيقدر ينشر كمسودة/خاص بس، وبيبقى فيه حدود. بعد الموافقة، النشر بيبقى مباشر على حسابك.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">إزاي أفصل الحساب؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>من مساحة الرفع، الخطوة الأولى ← «فصل الحساب». ده بيمسح التوكن من الجلسة عندنا. ولإلغاء التصريح نهائيًا من ناحية تيك توك: إعدادات تيك توك ← Security &amp; permissions ← Manage app permissions ← اختار التطبيق ← Remove.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">الموقع بيشتغل على الموبايل؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>أيوه. الواجهة متجاوبة بالكامل، والمعاينة بتتحول تحت الفورم على الشاشات الصغيرة. اختيار الفيديو بيفتح ملفات الجهاز عادي.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">أي صيغ فيديو مدعومة؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>MP4 و MOV و WebM. الأفضل MP4 بترميز H.264 لأن تيك توك بيقبله أكتر، والمدة القصوى على المنصة عادةً 10 دقايق (بتختلف حسب الحساب).</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">بياناتي بتتحفظ فين وقد إيه؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>بنحفظ معرّف الحساب (open_id)، الاسم، والصورة، والتوكنات — في جلسة على السيرفر مدة صلاحيتها 30 يوم، أو لحد ما تفصل الحساب. التفاصيل الكاملة في <a href="/privacy.html" style="color:var(--accent)">سياسة الخصوصية</a>.</div></div>
+        </div>
+
+        <div class="acc">
+          <button type="button">مين بيطور الموقع وأقدر أتواصل معاه؟<span class="chev">▾</span></button>
+          <div class="acc-body"><div>على <a href="mailto:hello@hamadtiktok.app" style="color:var(--accent)">hello@hamadtiktok.app</a> — بنرد على أي سؤال عن الخصوصية أو حذف البيانات.</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:44px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="/upload.html">افتح مساحة الرفع</a>
+        <a class="btn btn-ghost" href="/privacy.html">سياسة الخصوصية</a>
+        <a class="btn btn-ghost" href="/terms.html">شروط الاستخدام</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-note">© <span id="year">2026</span> Hamad TikTok</div>
+      <div class="footer-links">
+        <a href="/">الرئيسية</a>
+        <a href="/privacy.html">الخصوصية</a>
+        <a href="/terms.html">الشروط</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/app.js?v=1"></script>
+<script>
+(function () {
+  document.querySelectorAll('.acc').forEach(function (acc) {
+    var btn = acc.querySelector('button');
+    var body = acc.querySelector('.acc-body');
+    btn.addEventListener('click', function () {
+      var open = acc.classList.toggle('open');
+      body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
+    });
+  });
+  var y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

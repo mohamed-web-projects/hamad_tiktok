@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: hamad-tiktok
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: TIKTOK_CLIENT_KEY
+        sync: false
+      - key: TIKTOK_CLIENT_SECRET
+        sync: false
+      - key: TIKTOK_REDIRECT_URI
+        sync: false
+      - key: TIKTOK_SCOPES
+        value: user.info.basic,user.info.profile,user.info.stats,video.publish
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NODE_VERSION
+        value: "22"

@@ -1,0 +1,21 @@
+{
+  "name": "hamad-tiktok",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TikTok publishing workspace — prepare, review and publish a video post to your own TikTok account.",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "tiktok",
+    "oauth",
+    "content-posting",
+    "publisher"
+  ],
+  "license": "UNLICENSED"
+}

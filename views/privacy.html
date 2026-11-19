@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سياسة الخصوصية · Hamad TikTok</title>
+<meta name="description" content="سياسة الخصوصية: البيانات التي نجمعها، سببها، مدة الاحتفاظ بها، وحقوقك.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=1">
+</head>
+<body>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<div class="page">
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        </span>
+        <span class="brand-name">Hamad TikTok</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="/">الرئيسية</a>
+        <a href="/upload.html">مساحة الرفع</a>
+        <a href="/faq.html">الأسئلة</a>
+        <a href="/setup.html">التفعيل</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary btn-sm" href="/upload.html">ابدأ الآن</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="القائمة">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="wrap doc">
+      <h1>سياسة الخصوصية</h1>
+      <div class="updated">Last updated: 19 November 2026</div>
+      <p class="lead">الصفحة دي بتوضح بالظبط إيه البيانات اللي بنجمعها، ليه، ومدة الاحتفاظ بها، وإزاي تحذفها.</p>
+
+      <h2>1. البيانات اللي بنجمعها</h2>
+      <p>لما تربط حساب تيك توك، بنستلم من تيك توك (بعد موافقتك) البيانات دي بس:</p>
+      <ul>
+        <li><strong>open_id</strong> — معرّف ثابت للحساب عند تيك توك (مش اسم مستخدم ولا إيميل).</li>
+        <li><strong>الاسم الظاهر (display name) واسم المستخدم (username)</strong> — للعرض في الواجهة.</li>
+        <li><strong>صورة البروفايل</strong> — رابط الصورة اللي بتظهر في كارت الحساب.</li>
+        <li><strong>access token و refresh token</strong> — تصريح مؤقت بيستخدم للنشر على حسابك.</li>
+        <li><strong>الصلاحيات الممنوحة (scopes)</strong> وتاريخ الربط.</li>
+      </ul>
+      <p>مش بنجمع كلمة السر، ولا رسائلك، ولا قائمة متابعينك، ولا محتوى منشوراتك التانية.</p>
+
+      <h2>2. الفيديوهات</h2>
+      <p>
+        في خطوات اختيار الفيديو والتعديل، الملف بيتقرأ <strong>محليًا على جهازك</strong> (المدة، الدقة، الحجم، واستخراج الأغلفة).
+        الملف بيتبعت على السيرفر بس في لحظة النشر، وبيتمرر لتيك توك عشان ينشر. إحنا مش بنحتفظ بنسخة من الفيديو بعد انتهاء عملية النشر.
+      </p>
+
+      <h2>3. ليه بنجمع البيانات دي</h2>
+      <ul>
+        <li>عرض حسابك في الواجهة عشان تعرف بتنشر على أنهي حساب.</li>
+        <li>تنفيذ عملية النشر اللي انت طلبتها بنفسك.</li>
+        <li>الحفاظ على جلستك مفتوحة عشان مش تحتاج تسجل دخول كل مرة.</li>
+      </ul>
+      <p>مفيش استخدام للبيانات في إعلانات، ولا بيع، ولا مشاركة مع أي طرف تالت غير تيك توك نفسها (لتنفيذ النشر).</p>
+
+      <h2>4. مدة الاحتفاظ</h2>
+      <ul>
+        <li><strong>الجلسة والتوكنات:</strong> 30 يوم من آخر استخدام، أو لحد ما تضغط «فصل الحساب».</li>
+        <li><strong>توكن الوصول:</strong> بينتهي عند تيك توك بعد حوالي 24 ساعة، وبيتجدد تلقائيًا لو عندنا refresh token صالح.</li>
+        <li><strong>سجلات الأخطاء:</strong> بتُحذف تلقائيًا بعد 14 يوم.</li>
+      </ul>
+
+      <h2>5. الأمان</h2>
+      <p>
+        التوكنات بتتحفظ على السيرفر مش في المتصفح، والكوكي بتاع الجلسة HttpOnly وSameSite=Lax، وبيتحول لـ Secure على HTTPS.
+        المفاتيح السرية للتطبيق (Client Secret) مش بتظهر في أي صفحة ولا في أي كود بيوصل للمتصفح.
+      </p>
+
+      <h2>6. حقوقك</h2>
+      <ul>
+        <li><strong>الوصول:</strong> تقدر تطلب نسخة من البيانات المحفوظة عنك.</li>
+        <li><strong>الحذف:</strong> «فصل الحساب» بيمسح التوكن فورًا. ولو عايز حذف كل حاجة، ابعت إيميل وهنمسحها في خلال 7 أيام.</li>
+        <li><strong>سحب التصريح:</strong> من إعدادات تيك توك ← Security &amp; permissions ← Manage app permissions ← Remove.</li>
+      </ul>
+
+      <h2>7. الأطفال</h2>
+      <p>الخدمة مش موجهة لأي حد تحت 13 سنة (أو السن القانوني في بلدك)، وبنتبع شروط تيك توك نفسها في السن الأدنى.</p>
+
+      <h2>8. التغييرات</h2>
+      <p>لو غيّرنا السياسة، بنحدّث تاريخ «Last updated» فوق، والتغييرات الجوهرية بنبلّغ عنها في الواجهة.</p>
+
+      <h2>9. التواصل</h2>
+      <p>لأي سؤال أو طلب حذف بيانات: <a href="mailto:hello@hamadtiktok.app" style="color:var(--accent)">hello@hamadtiktok.app</a></p>
+
+      <h2 dir="ltr" style="text-align:left;margin-top:44px">English summary</h2>
+      <div dir="ltr" style="text-align:left;color:var(--muted);line-height:1.9;font-size:14px">
+        <p>Hamad TikTok is a publishing workspace for TikTok creators. When you connect your TikTok account we store only: your TikTok <code class="inline">open_id</code>, display name, username, avatar URL, the granted OAuth scopes, and the access/refresh tokens needed to publish on your behalf. We never receive your password, your messages, or your other content.</p>
+        <p>Videos are read locally in your browser for metadata and cover extraction, and are transferred only when you press Publish. We do not keep a copy after the publish request completes. Session data is retained for 30 days or until you disconnect the account. You can revoke access at any time from TikTok → Settings → Security &amp; permissions → Manage app permissions.</p>
+        <p>Contact: <a href="mailto:hello@hamadtiktok.app" style="color:var(--accent)">hello@hamadtiktok.app</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-note">© <span id="year">2026</span> Hamad TikTok</div>
+      <div class="footer-links">
+        <a href="/">الرئيسية</a>
+        <a href="/terms.html">الشروط</a>
+        <a href="/faq.html">الأسئلة</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/app.js?v=1"></script>
+</body>
+</html>
