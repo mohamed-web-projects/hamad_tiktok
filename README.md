@@ -73,7 +73,7 @@ git push -u origin main
 |---|---|
 | Language | `Node` |
 | Build Command | `npm install` |
-| Start Command | `node server.js` |
+| Start Command | `node local-server.js` |
 | Plan | `Free` |
 | Health Check Path | `/healthz` |
 
@@ -116,7 +116,7 @@ SESSION_SECRET        = (سلسلة عشوائية طويلة)
 
 ```
 hamad-tiktok/
-├── server.js          # نقطة التشغيل المحلية / Render
+├── local-server.js    # نقطة التشغيل المحلية / Render
 ├── core/app.js        # السيرفر + OAuth + الجلسات + الـ API (بدون اعتماديات)
 ├── api/index.js       # نقطة دخول Vercel (Serverless Function)
 ├── vercel.json        # إعادة توجيه كل المسارات للـ function

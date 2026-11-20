@@ -65,5 +65,6 @@ vercel --prod     # إنتاج
   استخدم دومين خاص.
 - `Dockerfile` و `render.yaml` و `Procfile` لسه موجودين للنشر على Render أو
   منصات تانية؛ Vercel بيتجاهلهم.
-- للتشغيل المحلي العادي: `node server.js` (المنفذ الافتراضي 8899) — السيرفر
-  مش هيفتح منفذ وهو جوه Vercel.
+- للتشغيل المحلي العادي: `npm start` أو `node local-server.js` (المنفذ الافتراضي 8899).
+  ملف الدخول المحلي اتسمّى `local-server.js` (مش `server.js`) عشان Vercel ما يكتشفهوش
+  كـ root entrypoint ويحجب قواعد الـ rewrites؛ على Vercel المسؤول هو `api/index.js`.
