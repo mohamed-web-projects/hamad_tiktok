@@ -1,7 +1,7 @@
 {
   "name": "hamad-tiktok",
   "version": "1.0.0",
-  "main": "local-server.js",
+  "main": "api/index.js",
   "private": true,
   "description": "TikTok publishing workspace — prepare, review and publish a video post to your own TikTok account.",
   "engines": {
