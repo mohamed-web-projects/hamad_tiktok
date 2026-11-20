@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "description": "TikTok publishing workspace — prepare, review and publish a video post to your own TikTok account.",
-  "main": "local-server.js",
   "engines": {
     "node": ">=18"
   },

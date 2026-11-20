@@ -24,6 +24,10 @@
     "api/index.js": {
       "includeFiles": "{views,public}/**/*",
       "maxDuration": 10
+    },
+    "local-server.js": {
+      "includeFiles": "{views,public}/**/*",
+      "maxDuration": 10
     }
   }
 }
