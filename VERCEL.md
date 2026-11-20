@@ -46,18 +46,25 @@ vercel --prod     # إنتاج
 - لو حصل `state_mismatch`، أكّد إن `SESSION_SECRET` متحطّ في متغيرات البيئة.
 
 ## لو الصفحات الفرعية بترجع 404
-الصفحات (`index/upload/faq/privacy/terms/setup`) والملفات (`styles.css`, `app.js`, ...)
-اتضافت كـ **rewrites صريحة** في `vercel.json` قبل الـ catch-all، عشان Vercel يقدّمها
-كملفات Static مباشرة من `views/` و`public/` بدل ما يعتمد على قراءتها جوه الـ function.
-بعد تعديل `vercel.json` لازم تعمل Redeploy (أو Push لو متصل بـ GitHub).
+الإعداد النهائي بيستخدم `builds` + `routes` (بدل الوضع الافتراضي "root entrypoint")
+عشان Vercel يبني `api/index.js` كـ **Serverless Function حقيقي** يستقبل كل المسارات:
 
-ولو لسه فيه 404، افتح `/api/debug` — هيرجّع المسارات اللي السيرفر استخدمها
-(`root`, `viewsDir`, `publicDir`) وحالة `viewsFound` / `publicFound`، ومنها نتأكد
-إن الملفات اتحزّمت صح.
+```json
+"builds": [{ "src": "api/index.js", "use": "@vercel/node",
+             "config": { "includeFiles": "{views,public}/**/*" } }],
+"routes": [{ "src": "/(.*)", "dest": "/api/index.js" }]
+```
+
+السبب: في وضع الـ root entrypoint كان Vercel بيخدم `/` وملفات `public/` بس،
+وبيرمي `/upload.html` و`/api/*` بـ 404. كمان الـ `rewrites` العادية بـ `check: true`
+بتتجاهل أي مسار (dest) مش موجود في مجلد `static/`، و`views/` مش هناك.
+
+ولو لسه فيه 404، افتح `/api/debug` — هيرجّع `root` و`viewsDir` و`publicDir`
+وحالة `viewsFound` / `publicFound`. على الإنتاج المفروض يطلع:
+`"root":"/var/task", "viewsFound":true, "publicFound":true`.
 
 كمان `core/app.js` بيعمل فحص تلقائي للمسارات: بيجرّب `process.cwd()` و
-`path.resolve(__dirname, '..')` و`__dirname` ويختار أول واحد فيه `views/` و`public/`،
-فبيشتغل سواء حزّم Vercel الملفات في جذر الـ function أو جنب الموديول.
+`path.resolve(__dirname, '..')` و`__dirname` ويختار أول واحد فيه `views/` و`public/`.
 
 ## ملاحظات
 
@@ -66,5 +73,4 @@ vercel --prod     # إنتاج
 - `Dockerfile` و `render.yaml` و `Procfile` لسه موجودين للنشر على Render أو
   منصات تانية؛ Vercel بيتجاهلهم.
 - للتشغيل المحلي العادي: `npm start` أو `node local-server.js` (المنفذ الافتراضي 8899).
-  ملف الدخول المحلي اتسمّى `local-server.js` (مش `server.js`) عشان Vercel ما يكتشفهوش
-  كـ root entrypoint ويحجب قواعد الـ rewrites؛ على Vercel المسؤول هو `api/index.js`.
+  على Vercel المسؤول هو `api/index.js`؛ `local-server.js` للـ local/Render بس.
