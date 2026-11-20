@@ -8,8 +8,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node -r ./core/load-env.js server.js",
+    "dev": "node -r ./core/load-env.js server.js"
   },
   "keywords": [
     "tiktok",

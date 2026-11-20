@@ -18,9 +18,36 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// On Vercel the function bundle keeps runtime assets at the project root,
-// which is process.cwd() — __dirname can point inside the build output.
-const ROOT = process.env.VERCEL ? process.cwd() : path.resolve(__dirname, '..');
+/* ------------------------------------------------------------------ *
+ * Locate the runtime assets.
+ * Vercel can place includeFiles either at process.cwd() (the bundle root)
+ * or next to the module, so probe every plausible location instead of
+ * assuming a single one. This is what makes /upload.html etc. work both
+ * locally and in production.
+ * ------------------------------------------------------------------ */
+
+function hasAssets(dir) {
+  return fs.existsSync(path.join(dir, 'views', 'index.html')) &&
+    fs.existsSync(path.join(dir, 'public', 'styles.css'));
+}
+
+function resolveRoot() {
+  const fallback = process.env.VERCEL ? process.cwd() : path.resolve(__dirname, '..');
+  const candidates = [
+    process.env.VERCEL ? process.cwd() : null,
+    path.resolve(__dirname, '..'),
+    __dirname,
+    process.cwd(),
+  ].filter(Boolean);
+
+  for (const dir of candidates) {
+    if (hasAssets(dir)) return dir;
+  }
+  console.warn('[warn] views/public not found. Looked in:', candidates.join(' | '));
+  return fallback;
+}
+
+const ROOT = resolveRoot();
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const VIEWS_DIR = path.join(ROOT, 'views');
 
@@ -347,14 +374,14 @@ function publicStatus(req, sessionOverride) {
     demo: Boolean(session?.demo),
     user: user
       ? {
-          username: user.username || null,
-          displayName: user.displayName || null,
-          avatarUrl: user.avatarUrl || null,
-          openId: user.openId || null,
-          profileLink: user.profileLink || null,
-          scopes: user.scopes || [],
-          connectedAt: user.connectedAt || null,
-        }
+        username: user.username || null,
+        displayName: user.displayName || null,
+        avatarUrl: user.avatarUrl || null,
+        openId: user.openId || null,
+        profileLink: user.profileLink || null,
+        scopes: user.scopes || [],
+        connectedAt: user.connectedAt || null,
+      }
       : null,
   };
 }
@@ -370,6 +397,20 @@ async function handle(req, res) {
   }
 
   /* --- API --- */
+  // Small diagnostic helper: useful to confirm where Vercel unpacked views/public.
+  if (pathname === '/api/debug') {
+    return sendJSON(res, 200, {
+      root: ROOT,
+      cwd: process.cwd(),
+      dirname: __dirname,
+      viewsDir: VIEWS_DIR,
+      publicDir: PUBLIC_DIR,
+      viewsFound: fs.existsSync(path.join(VIEWS_DIR, 'index.html')),
+      publicFound: fs.existsSync(path.join(PUBLIC_DIR, 'styles.css')),
+      vercel: Boolean(process.env.VERCEL),
+    });
+  }
+
   if (pathname === '/api/config') {
     return sendJSON(res, 200, {
       site: SITE_NAME,

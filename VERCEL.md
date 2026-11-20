@@ -51,6 +51,14 @@ vercel --prod     # إنتاج
 كملفات Static مباشرة من `views/` و`public/` بدل ما يعتمد على قراءتها جوه الـ function.
 بعد تعديل `vercel.json` لازم تعمل Redeploy (أو Push لو متصل بـ GitHub).
 
+ولو لسه فيه 404، افتح `/api/debug` — هيرجّع المسارات اللي السيرفر استخدمها
+(`root`, `viewsDir`, `publicDir`) وحالة `viewsFound` / `publicFound`، ومنها نتأكد
+إن الملفات اتحزّمت صح.
+
+كمان `core/app.js` بيعمل فحص تلقائي للمسارات: بيجرّب `process.cwd()` و
+`path.resolve(__dirname, '..')` و`__dirname` ويختار أول واحد فيه `views/` و`public/`،
+فبيشتغل سواء حزّم Vercel الملفات في جذر الـ function أو جنب الموديول.
+
 ## ملاحظات
 
 - النشر على `*.vercel.app` بيشتغل في Sandbox بتاع تيك توك. قبل مراجعة التطبيق
