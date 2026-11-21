@@ -8,7 +8,7 @@ function startLocalServer(handler) {
 
   server.listen(PORT, () => {
     console.log(`\n  Hamad TikTok running → http://localhost:${PORT}`);
-    console.log('  TikTok OAuth: ' + (process.env.TIKTOK_CLIENT_KEY && process.env.TIKTOK_CLIENT_SECRET ? 'CONFIGURED ✓' : 'NOT configured (demo mode)'));
+    console.log('  TikTok OAuth: ' + (process.env.TIKTOK_CLIENT_KEY && process.env.TIKTOK_CLIENT_SECRET ? 'CONFIGURED ✓' : 'NOT configured'));
     console.log('');
   });
 

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=2">
+<link rel="stylesheet" href="/styles.css?v=11">
 </head>
 <body>
 <canvas id="bg-canvas" aria-hidden="true"></canvas>
@@ -55,14 +55,38 @@
         </div>
       </div>
 
-      <div class="stepper" id="stepper">
-        <div class="step-pill active" data-step="0"><span class="num">1</span> الحساب</div>
-        <div class="step-sep"></div>
-        <div class="step-pill" data-step="1"><span class="num">2</span> الفيديو</div>
-        <div class="step-sep"></div>
-        <div class="step-pill" data-step="2"><span class="num">3</span> التفاصيل والغلاف</div>
-        <div class="step-sep"></div>
-        <div class="step-pill" data-step="3"><span class="num">4</span> المراجعة والنشر</div>
+      <div class="stepper" id="stepper" role="list" aria-label="مراحل النشر">
+        <div class="step-pill active" data-step="0" role="listitem" aria-current="step">
+          <span class="step-node" aria-hidden="true">
+            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+          </span>
+          <span class="step-label">الحساب</span>
+        </div>
+        <div class="step-link" aria-hidden="true"></div>
+        <div class="step-pill" data-step="1" role="listitem">
+          <span class="step-node" aria-hidden="true">
+            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="14" height="14" rx="2"/><path d="m22 8-6 4 6 4V8Z"/></svg>
+            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+          </span>
+          <span class="step-label">الفيديو</span>
+        </div>
+        <div class="step-link" aria-hidden="true"></div>
+        <div class="step-pill" data-step="2" role="listitem">
+          <span class="step-node" aria-hidden="true">
+            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+          </span>
+          <span class="step-label">التفاصيل والغلاف</span>
+        </div>
+        <div class="step-link" aria-hidden="true"></div>
+        <div class="step-pill" data-step="3" role="listitem">
+          <span class="step-node" aria-hidden="true">
+            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+          </span>
+          <span class="step-label">المراجعة والنشر</span>
+        </div>
       </div>
 
       <div class="ws-grid">
@@ -82,14 +106,12 @@
                 <div class="account-sub" id="accountSub">اضغط «تسجيل الدخول بتيك توك» للبدء</div>
               </div>
               <div id="accountBadge"></div>
-            </div>
-
-            <div id="connectActions" style="display:grid;gap:10px">
-              <a class="btn btn-primary btn-block" href="/auth/tiktok" id="loginBtn">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a4 4 0 0 1 0 8h-3"/><path d="M9 17H6a4 4 0 0 1 0-8h3"/><path d="M8 12h8"/></svg>
-                تسجيل الدخول بتيك توك
-              </a>
-              <button class="btn btn-ghost btn-block" id="demoBtn" type="button">متابعة بالوضع التجريبي</button>
+              <div class="account-actions" id="connectActions">
+                <a class="btn btn-primary btn-block" href="/auth/tiktok" id="loginBtn">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a4 4 0 0 1 0 8h-3"/><path d="M9 17H6a4 4 0 0 1 0-8h3"/><path d="M8 12h8"/></svg>
+                  تسجيل الدخول بتيك توك
+                </a>
+              </div>
             </div>
 
             <div class="panel-actions">
@@ -128,10 +150,7 @@
 
             <div class="panel-actions">
               <button class="btn btn-ghost" data-back="0">السابق</button>
-              <div style="display:flex;gap:8px">
-                <button class="btn btn-ghost" id="sampleBtn" type="button">نموذج تجريبي</button>
-                <button class="btn btn-primary" data-next="2">التالي</button>
-              </div>
+              <button class="btn btn-primary" data-next="2">التالي</button>
             </div>
           </section>
 
@@ -208,8 +227,8 @@
               <div class="success-icon">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
               </div>
-              <h3>تم إنهاء التجربة بنجاح</h3>
-              <p id="successText">المنشور جهز بالكامل. في الوضع التجريبي مفيش فيديو بيتبعت فعليًا لتيك توك.</p>
+              <h3>تم النشر بنجاح</h3>
+              <p id="successText">المنشور اتبعت لحسابك. راجع تيك توك بعد شوية — المعالجة بتاخد وقت.</p>
               <button class="btn btn-ghost" id="restartBtn" type="button">ابدأ من جديد</button>
             </div>
 
@@ -284,6 +303,7 @@
   </footer>
 </div>
 
-<script src="/upload.js?v=2"></script>
+<script src="/app.js?v=11"></script>
+<script src="/upload.js?v=11"></script>
 </body>
 </html>

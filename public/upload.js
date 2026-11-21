@@ -35,7 +35,6 @@
     accountSub: $('accountSub'),
     accountBadge: $('accountBadge'),
     connectActions: $('connectActions'),
-    demoBtn: $('demoBtn'),
     dropzone: $('dropzone'),
     fileInput: $('fileInput'),
     fileRow: $('fileRow'),
@@ -43,7 +42,6 @@
     fileName: $('fileName'),
     fileSpecs: $('fileSpecs'),
     clearFile: $('clearFile'),
-    sampleBtn: $('sampleBtn'),
     caption: $('caption'),
     captionCount: $('captionCount'),
     covers: $('covers'),
@@ -142,18 +140,16 @@
         els.accountAvatar.textContent = initials(u.username);
       }
       els.accountName.textContent = label;
-      els.accountSub.textContent = u.demo
-        ? 'حساب تجريبي — مفيش اتصال حقيقي بتيك توك'
-        : (u.displayName ? u.displayName : 'مربوط بتيك توك');
-      els.accountBadge.innerHTML = u.demo
-        ? '<span class="badge badge-demo">تجريبي</span>'
-        : '<span class="badge badge-ok">متصل</span>';
+      els.accountName.dir = 'ltr';
+      els.accountSub.textContent = u.displayName ? u.displayName : 'مربوط بتيك توك';
+      els.accountBadge.innerHTML = '<span class="badge badge-ok">متصل</span>';
       els.connectActions.style.display = 'none';
       els.previewUser.textContent = label;
       els.previewAvatar.innerHTML = u.avatarUrl ? '<img src="' + u.avatarUrl + '" alt="">' : initials(u.username);
     } else {
       els.accountAvatar.textContent = '?';
       els.accountName.textContent = 'مش مربوط';
+      els.accountName.dir = 'rtl';
       els.accountSub.textContent = 'اضغط «تسجيل الدخول بتيك توك» للبدء';
       els.accountBadge.innerHTML = '<span class="badge badge-off">غير مربوط</span>';
       els.connectActions.style.display = 'grid';
@@ -184,6 +180,8 @@
       var i = Number(p.dataset.step);
       p.classList.toggle('active', i === n);
       p.classList.toggle('done', i < n);
+      if (i === n) p.setAttribute('aria-current', 'step');
+      else p.removeAttribute('aria-current');
     });
     if (n === 3) renderReview();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -205,14 +203,6 @@
   /* ------------------------------------------------------------ *
    * account actions
    * ------------------------------------------------------------ */
-
-  els.demoBtn.addEventListener('click', function () {
-    els.demoBtn.disabled = true;
-    fetch('/api/tiktok/demo', { method: 'POST' })
-      .then(function (r) { return r.json(); })
-      .then(function (s) { state.status = s; renderAccount(); })
-      .catch(function () { els.demoBtn.disabled = false; });
-  });
 
   els.navSignOut.addEventListener('click', function () {
     els.navSignOut.disabled = true;
@@ -273,6 +263,8 @@
     els.previewBadge.className = 'badge badge-off';
     els.previewBadge.textContent = 'فارغ';
     els.coverHint.textContent = 'الأغلفة بتتسحب من الفيديو نفسه';
+    els.fileName.title = '';
+    els.fileSpecs.title = '';
     els.covers.querySelectorAll('.cover').forEach(function (c, i) {
       c.classList.remove('active');
       c.innerHTML = '<span class="ph">غلاف ' + (i + 1) + '</span>';
@@ -289,7 +281,9 @@
     els.dropzone.style.display = 'none';
     els.fileRow.classList.add('show');
     els.fileName.textContent = file.name;
+    els.fileName.title = file.name;
     els.fileSpecs.textContent = fmtSize(file.size) + ' · جاري القراءة…';
+    els.fileSpecs.title = els.fileSpecs.textContent;
 
     state.objectUrl = URL.createObjectURL(file);
     var v = document.createElement('video');
@@ -305,6 +299,7 @@
       state.height = v.videoHeight || 0;
       els.fileSpecs.textContent =
         fmtDuration(state.duration) + ' · ' + state.width + '×' + state.height + ' · ' + fmtSize(file.size);
+      els.fileSpecs.title = els.fileSpecs.textContent;
 
       // thumbnail
       els.fileThumb.innerHTML = '';
@@ -324,6 +319,7 @@
 
     v.addEventListener('error', function () {
       els.fileSpecs.textContent = 'مش قادر أقرأ الملف — جرّب صيغة تانية (MP4)';
+      els.fileSpecs.title = els.fileSpecs.textContent;
     });
   }
 
@@ -407,61 +403,6 @@
     els.phonePlaceholder.style.display = 'none';
   }
 
-  els.sampleBtn.addEventListener('click', function () {
-    resetFile();
-    state.file = { name: 'sample-reel.mp4', size: 12.4 * 1024 * 1024, type: 'video/mp4', sample: true };
-    state.duration = 24;
-    state.width = 1080;
-    state.height = 1920;
-    els.dropzone.style.display = 'none';
-    els.fileRow.classList.add('show');
-    els.fileName.textContent = state.file.name;
-    els.fileSpecs.textContent = fmtDuration(state.duration) + ' · 1080×1920 · ' + fmtSize(state.file.size);
-    els.fileThumb.innerHTML = '<span style="font-size:11px;color:var(--dim)">نموذج</span>';
-
-    // generated placeholder covers
-    state.covers = [0, 1, 2, 3].map(function (i) { return gradientCover(i); });
-    state.coverIndex = 0;
-    paintCovers();
-
-    els.phonePlaceholder.style.display = 'none';
-    els.previewBadge.className = 'badge badge-demo';
-    els.previewBadge.textContent = 'نموذج';
-    els.previewNote.textContent = 'نموذج تجريبي — الأغلفة دي مولّدة، مش من فيديو حقيقي.';
-    goStep(2);
-  });
-
-  function gradientCover(i) {
-    var c = document.createElement('canvas');
-    c.width = 270; c.height = 480;
-    var g = c.getContext('2d');
-    var palettes = [
-      ['#0b2a3d', '#38bdf8'], ['#0a2434', '#22d3ee'],
-      ['#101b33', '#7dd3fc'], ['#0c1f2e', '#34d399']
-    ];
-    var p = palettes[i % palettes.length];
-    var grad = g.createLinearGradient(0, 0, 270, 480);
-    grad.addColorStop(0, p[0]);
-    grad.addColorStop(1, p[1]);
-    g.fillStyle = grad;
-    g.fillRect(0, 0, 270, 480);
-    g.globalAlpha = 0.18;
-    for (var k = 0; k < 5; k++) {
-      g.beginPath();
-      g.arc(60 + k * 45, 120 + k * 62, 40 + k * 9, 0, Math.PI * 2);
-      g.fillStyle = '#ffffff';
-      g.fill();
-    }
-    g.globalAlpha = 1;
-    g.fillStyle = 'rgba(0,0,0,0.35)';
-    g.fillRect(0, 360, 270, 120);
-    g.fillStyle = '#eaf6ff';
-    g.font = '600 20px Cairo, sans-serif';
-    g.textAlign = 'center';
-    g.fillText('نموذج ' + (i + 1), 135, 425);
-    return c.toDataURL('image/jpeg', 0.85);
-  }
-
   /* ------------------------------------------------------------ *
    * details
    * ------------------------------------------------------------ */
@@ -520,10 +461,7 @@
     }).join('');
 
     els.reviewAlert.innerHTML = '';
-    if (st.demo) {
-      els.reviewAlert.innerHTML = alertBox('warn',
-        '<strong>وضع تجريبي.</strong> هتمشي على كل خطوات النشر، لكن مفيش فيديو هيتبعت فعليًا لتيك توك.');
-    } else if (!st.connected) {
+    if (!st.connected) {
       els.reviewAlert.innerHTML = alertBox('warn',
         'الحساب مش مربوط. تقدر تكمل التجربة، بس النشر الحقيقي محتاج تسجيل دخول. <a href="#" id="backToAccount" style="color:var(--accent);text-decoration:underline">ارجع للخطوة 1</a>');
       var back = $('backToAccount');
@@ -543,6 +481,11 @@
 
   els.publishBtn.addEventListener('click', function () {
     if (state.publishing || state.published) return;
+    if (!(state.status && state.status.connected)) {
+      els.accountAlert.innerHTML = alertBox('warn', 'سجّل دخولك بتيك توك أولاً عشان تنشر.');
+      goStep(0);
+      return;
+    }
     state.publishing = true;
     els.publishBtn.disabled = true;
     els.publishBtn.textContent = 'جاري النشر…';
@@ -586,10 +529,9 @@
     els.phaseLabel.textContent = 'خلص';
     els.progress.style.display = 'none';
 
-    var demo = !state.status || !state.status.connected || state.status.demo;
-    els.successText.textContent = demo
-      ? 'المنشور جهز بالكامل. في الوضع التجريبي مفيش فيديو بيتبعت فعليًا لتيك توك — الخطوات والشكل بس.'
-      : 'المنشور اتبعت لحسابك @' + (state.status.user ? state.status.user.username : '') + '. راجع تيك توك بعد شوية — المعالجة بتاخد وقت.';
+    els.successText.textContent = 'المنشور اتبعت لحسابك @' +
+      (state.status.user ? state.status.user.username : '') +
+      '. راجع تيك توك بعد شوية — المعالجة بتاخد وقت.';
     els.successBox.classList.add('show');
   }
 
@@ -626,7 +568,7 @@
       var friendly = msg === 'state_mismatch'
         ? 'جلسة الربط انتهت أو مش متطابقة. جرّب «تسجيل الدخول بتيك توك» تاني.'
         : msg === 'not_configured'
-          ? 'الربط الحقيقي غير متاح حالياً. تقدر تكمل بالوضع التجريبي.'
+          ? 'الربط الحقيقي غير متاح حالياً.'
           : msg;
       els.accountAlert.innerHTML = alertBox('bad', '<strong>الربط مكمّلش.</strong> ' + escapeHtml(friendly));
       window.history.replaceState({}, '', '/upload.html');

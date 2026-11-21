@@ -9,9 +9,8 @@
  *  - Expose /api/tiktok/status, /api/tiktok/disconnect, /api/config
  *  - /healthz for hosting platforms
  *
- * If TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET are missing the server still runs
- * in "demo" mode: the UI clearly labels everything as تجريبي. Nothing pretends
- * to be a real connection.
+ * If TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET are missing, OAuth start returns
+ * a clear error to the upload page. Nothing pretends to be a real connection.
  */
 
 const fs = require('fs');
@@ -369,7 +368,6 @@ function publicStatus(req, sessionOverride) {
     redirectUri: effectiveRedirectUri(req),
     scopes: CFG.scopes,
     connected: Boolean(user),
-    demo: Boolean(session?.demo),
     user: user
       ? {
         username: user.username || null,
@@ -437,28 +435,10 @@ async function handle(req, res) {
     return sendJSON(res, 200, status);
   }
 
-  if (pathname === '/api/tiktok/demo' && req.method === 'POST') {
-    // Explicit, clearly-labelled demo mode. Never silently fakes a connection.
-    const session = getSession(req) || createSession();
-    session.demo = true;
-    session.user = {
-      username: 'demo.creator',
-      displayName: 'حساب تجريبي',
-      avatarUrl: null,
-      openId: 'demo',
-      scopes: [],
-      connectedAt: Date.now(),
-      demo: true,
-    };
-    saveSession(res, session);
-    return sendJSON(res, 200, publicStatus(req, session));
-  }
-
   if (pathname === '/api/tiktok/disconnect' && req.method === 'POST') {
     const session = getSession(req);
     if (session) {
       session.user = null;
-      session.demo = false;
       saveSession(res, session);
     } else {
       dropSession(res);
@@ -507,7 +487,6 @@ async function handle(req, res) {
       }
 
       const session = getSession(req) || createSession();
-      session.demo = false;
       session.user = {
         username: profile.username || profile.display_name || 'tiktok_user',
         displayName: profile.display_name || profile.username || null,

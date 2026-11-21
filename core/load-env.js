@@ -13,7 +13,7 @@ let text;
 try {
   text = fs.readFileSync(file, 'utf8');
 } catch (_) {
-  // No .env file — that's fine, demo mode still works.
+  // No .env file — that's fine; the app starts and reports OAuth as unavailable.
   text = '';
 }
 
