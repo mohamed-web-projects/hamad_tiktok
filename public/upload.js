@@ -3,7 +3,6 @@
   'use strict';
 
   var state = {
-    config: null,
     status: null,
     step: 0,
     file: null,
@@ -24,7 +23,10 @@
   var $ = function (id) { return document.getElementById(id); };
 
   var els = {
-    headerStatus: $('headerStatus'),
+    navUser: $('navUser'),
+    navAvatar: $('navAvatar'),
+    navUserName: $('navUserName'),
+    navSignOut: $('navSignOut'),
     stepper: $('stepper'),
     accountAlert: $('accountAlert'),
     accountBox: $('accountBox'),
@@ -33,10 +35,8 @@
     accountSub: $('accountSub'),
     accountBadge: $('accountBadge'),
     connectActions: $('connectActions'),
-    disconnectActions: $('disconnectActions'),
     loginBtn: $('loginBtn'),
     demoBtn: $('demoBtn'),
-    disconnectBtn: $('disconnectBtn'),
     dropzone: $('dropzone'),
     fileInput: $('fileInput'),
     fileRow: $('fileRow'),
@@ -111,42 +111,38 @@
    * ------------------------------------------------------------ */
 
   function loadState() {
-    return Promise.all([
-      fetch('/api/config', { cache: 'no-store' }).then(function (r) { return r.json(); }),
-      fetch('/api/tiktok/status', { cache: 'no-store' }).then(function (r) { return r.json(); })
-    ]).then(function (res) {
-      state.config = res[0];
-      state.status = res[1];
-      renderAccount();
-    }).catch(function () {
-      els.accountAlert.innerHTML = alertBox('bad', 'مش قادر أوصل للسيرفر. اتأكد إنه شغّال وحدّث الصفحة.');
-    });
+    fetch('/api/tiktok/status', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (s) { state.status = s; renderAccount(); })
+      .catch(function () {
+        els.accountAlert.innerHTML = alertBox('bad', 'مش قادر أوصل للسيرفر. حدّث الصفحة وحاول تاني.');
+      });
   }
 
   function renderAccount() {
     var st = state.status || {};
-    var configured = Boolean(st.configured);
-    var connected = Boolean(st.connected);
+    var u = st.connected ? st.user : null;
+    var label = '@' + ((u && u.username) || 'account');
 
-    // header pill
-    if (connected && st.demo) {
-      els.headerStatus.innerHTML = '<span class="badge badge-demo">وضع تجريبي</span>';
-    } else if (connected) {
-      els.headerStatus.innerHTML = '<span class="badge badge-ok">متصل · @' + (st.user && st.user.username ? st.user.username : '') + '</span>';
-    } else {
-      els.headerStatus.innerHTML = '<span class="badge badge-off">غير مربوط</span>';
+    // Navbar account area: profile + sign-out only while connected.
+    els.navUser.hidden = !u;
+    els.navSignOut.hidden = !u;
+    if (u) {
+      if (u.avatarUrl) {
+        els.navAvatar.innerHTML = '<img src="' + u.avatarUrl + '" alt="">';
+      } else {
+        els.navAvatar.textContent = initials(u.username);
+      }
+      els.navUserName.textContent = label;
     }
 
-    els.accountAlert.innerHTML = '';
-
-    if (connected && st.user) {
-      var u = st.user;
+    if (u) {
       if (u.avatarUrl) {
         els.accountAvatar.innerHTML = '<img src="' + u.avatarUrl + '" alt="">';
       } else {
         els.accountAvatar.textContent = initials(u.username);
       }
-      els.accountName.textContent = '@' + (u.username || 'account');
+      els.accountName.textContent = label;
       els.accountSub.textContent = u.demo
         ? 'حساب تجريبي — مفيش اتصال حقيقي بتيك توك'
         : (u.displayName ? u.displayName : 'مربوط بتيك توك');
@@ -154,14 +150,7 @@
         ? '<span class="badge badge-demo">تجريبي</span>'
         : '<span class="badge badge-ok">متصل</span>';
       els.connectActions.style.display = 'none';
-      els.disconnectActions.style.display = 'grid';
-
-      if (u.demo) {
-        els.accountAlert.innerHTML = alertBox('warn',
-          '<strong>وضع تجريبي.</strong> الحساب ده مش حقيقي — التجربة كاملة لكن مفيش أي فيديو بيتبعت لتيك توك. ' +
-          'لو عايز الربط الحقيقي، اضغط «فصل الحساب» وبعدها «تسجيل الدخول بتيك توك».');
-      }
-      els.previewUser.textContent = '@' + (u.username || 'account');
+      els.previewUser.textContent = label;
       els.previewAvatar.innerHTML = u.avatarUrl ? '<img src="' + u.avatarUrl + '" alt="">' : initials(u.username);
     } else {
       els.accountAvatar.textContent = '?';
@@ -169,14 +158,6 @@
       els.accountSub.textContent = 'اضغط «تسجيل الدخول بتيك توك» للبدء';
       els.accountBadge.innerHTML = '<span class="badge badge-off">غير مربوط</span>';
       els.connectActions.style.display = 'grid';
-      els.disconnectActions.style.display = 'none';
-
-      if (!configured) {
-        els.accountAlert.innerHTML = alertBox('warn',
-          '<strong>الربط الحقيقي غير مفعّل.</strong> مفاتيح تطبيق تيك توك مش متظبطة على السيرفر، ' +
-          'فزر «تسجيل الدخول» هيوديك على <a href="/setup.html" style="color:var(--accent);text-decoration:underline">صفحة التفعيل</a>. ' +
-          'تقدر تكمل بالوضع التجريبي عادي.');
-      }
     }
   }
 
@@ -242,12 +223,12 @@
       .catch(function () { els.demoBtn.disabled = false; });
   });
 
-  els.disconnectBtn.addEventListener('click', function () {
-    els.disconnectBtn.disabled = true;
+  els.navSignOut.addEventListener('click', function () {
+    els.navSignOut.disabled = true;
     fetch('/api/tiktok/disconnect', { method: 'POST' })
       .then(function (r) { return r.json(); })
-      .then(function (s) { state.status = s; renderAccount(); els.disconnectBtn.disabled = false; })
-      .catch(function () { els.disconnectBtn.disabled = false; });
+      .then(function (s) { state.status = s; renderAccount(); els.navSignOut.disabled = false; })
+      .catch(function () { els.navSignOut.disabled = false; });
   });
 
   /* ------------------------------------------------------------ *
@@ -660,10 +641,6 @@
     if (q.get('connected')) {
       els.accountAlert.innerHTML = alertBox('ok', '<strong>تم ربط الحساب.</strong> تقدر تكمل للخطوة التالية.');
       window.history.replaceState({}, '', '/upload.html');
-    }
-    if (q.get('needSetup')) {
-      els.accountAlert.innerHTML = alertBox('warn',
-        'الربط الحقيقي محتاج مفاتيح التطبيق. <a href="/setup.html" style="color:var(--accent);text-decoration:underline">افتح صفحة التفعيل</a>.');
     }
   }
 

@@ -30,7 +30,18 @@
         <a href="/setup.html">التفعيل</a>
       </nav>
       <div class="header-actions">
-        <a class="btn btn-ghost btn-sm" href="/setup.html">حالة التفعيل</a>
+        <div class="nav-user" id="navUser" hidden>
+          <span class="nav-avatar" id="navAvatar">?</span>
+          <span class="nav-user-name" id="navUserName"></span>
+        </div>
+        <button class="icon-btn signout-btn" id="navSignOut" type="button"
+                aria-label="تسجيل الخروج" title="تسجيل الخروج" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <path d="m16 17 5-5-5-5"/>
+            <path d="M21 12H9"/>
+          </svg>
+        </button>
         <button class="menu-toggle" id="menuToggle" aria-label="القائمة">☰</button>
       </div>
     </div>
@@ -43,7 +54,6 @@
           <h1>مساحة الرفع</h1>
           <p>أربع خطوات: الحساب، الفيديو، التفاصيل، ثم المراجعة والنشر.</p>
         </div>
-        <div id="headerStatus"></div>
       </div>
 
       <div class="stepper" id="stepper">
@@ -81,24 +91,6 @@
                 تسجيل الدخول بتيك توك
               </a>
               <button class="btn btn-ghost btn-block" id="demoBtn" type="button">متابعة بالوضع التجريبي</button>
-            </div>
-
-            <div id="disconnectActions" style="display:none;gap:10px">
-              <button class="btn btn-ghost btn-block" id="disconnectBtn" type="button">فصل الحساب</button>
-            </div>
-
-            <div style="margin-top:24px">
-              <div style="font-size:13px;color:var(--dim);margin-bottom:11px">الصلاحيات المطلوبة</div>
-              <ul class="scope-list">
-                <li><div><code>user.info.basic</code><br><span>الاسم والصورة — عشان نعرض حسابك في الواجهة</span></div></li>
-                <li><div><code>user.info.profile</code><br><span>بيانات البروفايل العامة</span></div></li>
-                <li><div><code>user.info.stats</code><br><span>عدد المتابعين والإعجابات — للعرض بس</span></div></li>
-                <li><div><code>video.publish</code><br><span>نشر الفيديو على حسابك بعد تأكيدك</span></div></li>
-              </ul>
-              <div class="alert alert-info" style="margin-top:14px">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M12 11v5"/></svg>
-                <div>مفيش قراءة رسائل، ومفيش وصول لكلمة السر. تقدر تلغي التصريح في أي وقت من إعدادات تيك توك.</div>
-              </div>
             </div>
 
             <div class="panel-actions">
