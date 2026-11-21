@@ -23,10 +23,6 @@
   var $ = function (id) { return document.getElementById(id); };
 
   var els = {
-    navUser: $('navUser'),
-    navAvatar: $('navAvatar'),
-    navUserName: $('navUserName'),
-    navSignOut: $('navSignOut'),
     stepper: $('stepper'),
     accountAlert: $('accountAlert'),
     accountBox: $('accountBox'),
@@ -116,22 +112,16 @@
       });
   }
 
+  // Keep the workspace in sync when the shared navbar signs the user in/out.
+  document.addEventListener('hamad:authchange', function (e) {
+    state.status = e.detail && e.detail.status;
+    renderAccount();
+  });
+
   function renderAccount() {
     var st = state.status || {};
     var u = st.connected ? st.user : null;
     var label = '@' + ((u && u.username) || 'account');
-
-    // Navbar account area: profile + sign-out only while connected.
-    els.navUser.hidden = !u;
-    els.navSignOut.hidden = !u;
-    if (u) {
-      if (u.avatarUrl) {
-        els.navAvatar.innerHTML = '<img src="' + u.avatarUrl + '" alt="">';
-      } else {
-        els.navAvatar.textContent = initials(u.username);
-      }
-      els.navUserName.textContent = label;
-    }
 
     if (u) {
       if (u.avatarUrl) {
@@ -199,51 +189,6 @@
   document.querySelectorAll('[data-back]').forEach(function (b) {
     b.addEventListener('click', function () { goStep(Number(b.dataset.back)); });
   });
-
-  /* ------------------------------------------------------------ *
-   * account actions
-   * ------------------------------------------------------------ */
-
-  var logoutModal = $('logoutModal');
-  var logoutConfirm = $('logoutConfirm');
-  var logoutCancel = $('logoutCancel');
-
-  function showLogoutModal(open) {
-    if (!logoutModal) return;
-    logoutModal.hidden = !open;
-    document.body.style.overflow = open ? 'hidden' : '';
-    if (open) {
-      if (logoutConfirm) logoutConfirm.focus();
-    } else if (!els.navSignOut.hidden) {
-      els.navSignOut.focus();
-    }
-  }
-
-  if (els.navSignOut && logoutModal && logoutConfirm && logoutCancel) {
-    els.navSignOut.addEventListener('click', function () { showLogoutModal(true); });
-
-    logoutCancel.addEventListener('click', function () { showLogoutModal(false); });
-    logoutModal.addEventListener('click', function (e) {
-      if (e.target === logoutModal) showLogoutModal(false);
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !logoutModal.hidden) showLogoutModal(false);
-    });
-
-    logoutConfirm.addEventListener('click', function () {
-      logoutConfirm.disabled = true;
-      els.navSignOut.disabled = true;
-      function done() {
-        logoutConfirm.disabled = false;
-        els.navSignOut.disabled = false;
-        showLogoutModal(false);
-      }
-      fetch('/api/tiktok/disconnect', { method: 'POST' })
-        .then(function (r) { return r.json(); })
-        .then(function (s) { state.status = s; renderAccount(); done(); })
-        .catch(function () { done(); });
-    });
-  }
 
   /* ------------------------------------------------------------ *
    * file handling

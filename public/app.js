@@ -9,16 +9,29 @@
   /* ---------- mobile menu ---------- */
   var toggle = document.getElementById('menuToggle');
   var nav = document.getElementById('nav');
+  var header = document.querySelector('.site-header');
   if (toggle && nav) {
+    function setMenu(open) {
+      nav.classList.toggle('open', open);
+      toggle.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'إغلاق القائمة' : 'القائمة');
+    }
+    setMenu(false);
     toggle.addEventListener('click', function () {
-      nav.classList.toggle('open');
-      toggle.textContent = nav.classList.contains('open') ? '✕' : '☰';
+      setMenu(!nav.classList.contains('open'));
     });
     nav.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') {
-        nav.classList.remove('open');
-        toggle.textContent = '☰';
+      if (e.target.tagName === 'A') setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('open')) {
+        setMenu(false);
+        toggle.focus();
       }
+    });
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('open') && header && !header.contains(e.target)) setMenu(false);
     });
   }
 
@@ -65,6 +78,112 @@
       if (e.key === 'ArrowRight') render(current - 1);
     });
   }
+
+  /* ---------- global account state (every page) ---------- */
+  (function () {
+    var actions = document.querySelector('.header-actions');
+    if (!actions || !toggle) return;
+
+    var chip = document.createElement('a');
+    chip.className = 'nav-user';
+    chip.id = 'navUser';
+    chip.hidden = true;
+    chip.innerHTML = '<span class="nav-avatar" id="navAvatar">?</span><span class="nav-user-name" id="navUserName"></span>';
+
+    var signOut = document.createElement('button');
+    signOut.className = 'icon-btn signout-btn';
+    signOut.id = 'navSignOut';
+    signOut.type = 'button';
+    signOut.hidden = true;
+    signOut.setAttribute('aria-label', 'تسجيل الخروج');
+    signOut.title = 'تسجيل الخروج';
+    signOut.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>';
+
+    actions.insertBefore(chip, toggle);
+    actions.insertBefore(signOut, toggle);
+
+    var modal = document.createElement('div');
+    modal.className = 'modal-backdrop';
+    modal.id = 'logoutModal';
+    modal.hidden = true;
+    modal.innerHTML =
+      '<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle" aria-describedby="logoutModalText">' +
+      '<h3 id="logoutModalTitle">تأكيد تسجيل الخروج</h3>' +
+      '<p id="logoutModalText">هل أنت متأكد من تسجيل الخروج؟</p>' +
+      '<div class="modal-actions">' +
+      '<button class="btn btn-ghost" id="logoutCancel" type="button">إلغاء</button>' +
+      '<button class="btn btn-primary" id="logoutConfirm" type="button">تسجيل الخروج</button>' +
+      '</div></div>';
+    document.body.appendChild(modal);
+
+    var avatar = document.getElementById('navAvatar');
+    var name = document.getElementById('navUserName');
+    var cancel = document.getElementById('logoutCancel');
+    var confirm = document.getElementById('logoutConfirm');
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+      });
+    }
+    function initials(v) {
+      if (!v) return '?';
+      return String(v).replace(/^@/, '').slice(0, 2).toUpperCase();
+    }
+
+    function applyStatus(s) {
+      var user = s && s.connected ? s.user : null;
+      chip.hidden = !user;
+      signOut.hidden = !user;
+      if (user) {
+        avatar.innerHTML = user.avatarUrl ? '<img src="' + esc(user.avatarUrl) + '" alt="">' : esc(initials(user.username));
+        name.textContent = '@' + (user.username || 'account');
+        chip.title = name.textContent;
+        if (user.profileLink) {
+          chip.href = user.profileLink;
+          chip.target = '_blank';
+          chip.rel = 'noopener noreferrer';
+        } else {
+          chip.removeAttribute('href');
+          chip.removeAttribute('target');
+          chip.removeAttribute('rel');
+        }
+      }
+      document.dispatchEvent(new CustomEvent('hamad:authchange', { detail: { status: s, user: user } }));
+    }
+
+    fetch('/api/tiktok/status', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(applyStatus)
+      .catch(function () { applyStatus(null); });
+
+    function showModal(open) {
+      modal.hidden = !open;
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) confirm.focus();
+      else if (!signOut.hidden) signOut.focus();
+    }
+    signOut.addEventListener('click', function () { showModal(true); });
+    cancel.addEventListener('click', function () { showModal(false); });
+    modal.addEventListener('click', function (e) { if (e.target === modal) showModal(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) showModal(false);
+    });
+
+    confirm.addEventListener('click', function () {
+      confirm.disabled = true;
+      signOut.disabled = true;
+      function done() {
+        confirm.disabled = false;
+        signOut.disabled = false;
+        showModal(false);
+      }
+      fetch('/api/tiktok/disconnect', { method: 'POST' })
+        .then(function (r) { return r.json(); })
+        .then(function (s) { applyStatus(s); done(); })
+        .catch(function () { done(); });
+    });
+  })();
 
   /* ---------- animated background ---------- */
   var canvas = document.getElementById('bg-canvas');

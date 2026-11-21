@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=12">
+<link rel="stylesheet" href="/styles.css?v=16">
 </head>
 <body>
 <canvas id="bg-canvas" aria-hidden="true"></canvas>
@@ -29,7 +29,10 @@
         <a href="/faq.html" class="active">الأسئلة</a>
       </nav>
       <div class="header-actions">
-        <button class="menu-toggle" id="menuToggle" aria-label="القائمة">☰</button>
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="nav">
+          <svg class="menu-icon icon-hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+          <svg class="menu-icon icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -130,7 +133,7 @@
   </footer>
 </div>
 
-<script src="/app.js?v=11"></script>
+<script src="/app.js?v=15"></script>
 <script>
 (function () {
   document.querySelectorAll('.acc').forEach(function (acc) {
