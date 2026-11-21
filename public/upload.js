@@ -35,7 +35,6 @@
     accountSub: $('accountSub'),
     accountBadge: $('accountBadge'),
     connectActions: $('connectActions'),
-    loginBtn: $('loginBtn'),
     demoBtn: $('demoBtn'),
     dropzone: $('dropzone'),
     fileInput: $('fileInput'),
@@ -206,14 +205,6 @@
   /* ------------------------------------------------------------ *
    * account actions
    * ------------------------------------------------------------ */
-
-  els.loginBtn.addEventListener('click', function (e) {
-    if (state.status && !state.status.configured) {
-      // server will bounce to /setup.html anyway; make it explicit
-      e.preventDefault();
-      window.location.href = '/setup.html?state=missing-keys';
-    }
-  });
 
   els.demoBtn.addEventListener('click', function () {
     els.demoBtn.disabled = true;
@@ -634,7 +625,9 @@
       var msg = q.get('error');
       var friendly = msg === 'state_mismatch'
         ? 'جلسة الربط انتهت أو مش متطابقة. جرّب «تسجيل الدخول بتيك توك» تاني.'
-        : msg;
+        : msg === 'not_configured'
+          ? 'الربط الحقيقي غير متاح حالياً. تقدر تكمل بالوضع التجريبي.'
+          : msg;
       els.accountAlert.innerHTML = alertBox('bad', '<strong>الربط مكمّلش.</strong> ' + escapeHtml(friendly));
       window.history.replaceState({}, '', '/upload.html');
     }

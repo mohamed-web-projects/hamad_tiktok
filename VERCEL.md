@@ -41,7 +41,6 @@ vercel --prod     # إنتاج
 ## بعد النشر
 
 - `/healthz` لازم يرجّع `{"ok":true,...}`.
-- `/setup.html` هيعرض الـ Redirect URI الفعلي من `/api/config`.
 - اختبر وضع التجريبي: `POST /api/tiktok/demo` ثم حدّث الصفحة — لازم يفضل متصل.
 - لو حصل `state_mismatch`، أكّد إن `SESSION_SECRET` متحطّ في متغيرات البيئة.
 

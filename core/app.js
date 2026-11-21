@@ -4,14 +4,14 @@
  * Hamad TikTok — single-process Node server (zero dependencies).
  *
  * Responsibilities
- *  - Serve the static-ish pages (index / upload / faq / privacy / terms / setup)
+ *  - Serve the static-ish pages (index / upload / faq / privacy / terms)
  *  - Real TikTok Login Kit OAuth 2.0 flow (PKCE + state + signed session cookie)
  *  - Expose /api/tiktok/status, /api/tiktok/disconnect, /api/config
  *  - /healthz for hosting platforms
  *
  * If TIKTOK_CLIENT_KEY / TIKTOK_CLIENT_SECRET are missing the server still runs
- * in "demo" mode: the UI clearly labels everything as تجريبي and points the user
- * to /setup.html. Nothing pretends to be a real connection.
+ * in "demo" mode: the UI clearly labels everything as تجريبي. Nothing pretends
+ * to be a real connection.
  */
 
 const fs = require('fs');
@@ -346,8 +346,6 @@ const PAGES = {
   '/privacy.html': 'privacy.html',
   '/terms': 'terms.html',
   '/terms.html': 'terms.html',
-  '/setup': 'setup.html',
-  '/setup.html': 'setup.html',
 };
 
 function publicSiteUrl(req) {
@@ -471,7 +469,7 @@ async function handle(req, res) {
   /* --- OAuth start --- */
   if (pathname === '/auth/tiktok') {
     if (!isConfigured()) {
-      return redirect(res, '/setup.html?state=missing-keys');
+      return redirect(res, '/upload.html?error=not_configured');
     }
     const { state, verifier } = newState();
     const params = new URLSearchParams({
