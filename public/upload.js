@@ -204,13 +204,46 @@
    * account actions
    * ------------------------------------------------------------ */
 
-  els.navSignOut.addEventListener('click', function () {
-    els.navSignOut.disabled = true;
-    fetch('/api/tiktok/disconnect', { method: 'POST' })
-      .then(function (r) { return r.json(); })
-      .then(function (s) { state.status = s; renderAccount(); els.navSignOut.disabled = false; })
-      .catch(function () { els.navSignOut.disabled = false; });
-  });
+  var logoutModal = $('logoutModal');
+  var logoutConfirm = $('logoutConfirm');
+  var logoutCancel = $('logoutCancel');
+
+  function showLogoutModal(open) {
+    if (!logoutModal) return;
+    logoutModal.hidden = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      if (logoutConfirm) logoutConfirm.focus();
+    } else if (!els.navSignOut.hidden) {
+      els.navSignOut.focus();
+    }
+  }
+
+  if (els.navSignOut && logoutModal && logoutConfirm && logoutCancel) {
+    els.navSignOut.addEventListener('click', function () { showLogoutModal(true); });
+
+    logoutCancel.addEventListener('click', function () { showLogoutModal(false); });
+    logoutModal.addEventListener('click', function (e) {
+      if (e.target === logoutModal) showLogoutModal(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !logoutModal.hidden) showLogoutModal(false);
+    });
+
+    logoutConfirm.addEventListener('click', function () {
+      logoutConfirm.disabled = true;
+      els.navSignOut.disabled = true;
+      function done() {
+        logoutConfirm.disabled = false;
+        els.navSignOut.disabled = false;
+        showLogoutModal(false);
+      }
+      fetch('/api/tiktok/disconnect', { method: 'POST' })
+        .then(function (r) { return r.json(); })
+        .then(function (s) { state.status = s; renderAccount(); done(); })
+        .catch(function () { done(); });
+    });
+  }
 
   /* ------------------------------------------------------------ *
    * file handling
@@ -457,7 +490,7 @@
     els.reviewList.innerHTML = rows.map(function (r) {
       // keep Latin/number-only values in their natural order inside an RTL row
       var dir = /[\u0600-\u06FF]/.test(String(r[1])) ? 'rtl' : 'ltr';
-      return '<div class="review-row"><span class="k">' + r[0] + '</span><span class="v" dir="' + dir + '">' + escapeHtml(r[1]) + '</span></div>';
+      return '<div class="review-row"><span class="k">' + r[0] + '</span><span class="v" dir="' + dir + '" title="' + escapeHtml(r[1]) + '">' + escapeHtml(r[1]) + '</span></div>';
     }).join('');
 
     els.reviewAlert.innerHTML = '';

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=11">
+<link rel="stylesheet" href="/styles.css?v=12">
 </head>
 <body>
 <canvas id="bg-canvas" aria-hidden="true"></canvas>
@@ -301,9 +301,20 @@
       </div>
     </div>
   </footer>
+
+  <div class="modal-backdrop" id="logoutModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle" aria-describedby="logoutModalText">
+      <h3 id="logoutModalTitle">تأكيد تسجيل الخروج</h3>
+      <p id="logoutModalText">هل أنت متأكد من تسجيل الخروج؟</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="logoutCancel" type="button">إلغاء</button>
+        <button class="btn btn-primary" id="logoutConfirm" type="button">تسجيل الخروج</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<script src="/app.js?v=11"></script>
-<script src="/upload.js?v=11"></script>
+<script src="/app.js?v=12"></script>
+<script src="/upload.js?v=12"></script>
 </body>
 </html>
